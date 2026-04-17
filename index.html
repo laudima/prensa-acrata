@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hemeroteca Ácrata — Archivo Histórico de Prensa Libertaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f5f0e8;
+      color: #1a1208;
+      font-family: 'Libre Baskerville', Georgia, serif;
+      min-height: 100vh;
+    }
+
+    /* MASTHEAD */
+    .masthead {
+      border-top: 6px solid #1a1208;
+      border-bottom: 3px solid #1a1208;
+      text-align: center;
+      padding: 1.5rem 1rem 1rem;
+      background: #f5f0e8;
+    }
+
+    .masthead::after {
+      content: '';
+      display: block;
+      height: 1px;
+      background: #1a1208;
+      margin-top: 0.8rem;
+    }
+
+    .masthead-eyebrow {
+      font-family: 'Special Elite', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #5a3e1b;
+      margin-bottom: 0.5rem;
+    }
+
+    .masthead-title {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1;
+      color: #1a1208;
+    }
+
+    .masthead-subtitle {
+      font-family: 'Special Elite', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #5a3e1b;
+      margin-top: 0.4rem;
+    }
+
+    .masthead-rule {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.6rem auto 0;
+      max-width: 400px;
+      justify-content: center;
+    }
+
+    .masthead-rule span { font-size: 1.1rem; color: #8b3a3a; }
+    .masthead-rule::before, .masthead-rule::after {
+      content: ''; flex: 1; height: 1px; background: #8b3a3a;
+    }
+
+    /* ACERCA DE */
+    .acerca-wrapper {
+      border-bottom: 3px double #1a1208;
+      background: #ede8dc;
+    }
+
+    .acerca-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 1.2rem;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #c8b99a;
+      cursor: pointer;
+      font-family: 'Special Elite', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #1a1208;
+    }
+
+    .acerca-toggle:hover { background: #e5dece; }
+
+    .acerca-toggle .arrow {
+      font-size: 12px;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+
+    .acerca-toggle.open .arrow { transform: rotate(180deg); }
+
+    .acerca-body {
+      display: none;
+      padding: 1.5rem 1.4rem 1.8rem;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .acerca-body.open { display: block; }
+
+    .acerca-body p {
+      font-size: 0.88rem;
+      line-height: 1.85;
+      color: #2a1f0e;
+      margin-bottom: 0.9rem;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .acerca-body p:last-child { margin-bottom: 0; }
+
+    .acerca-body a {
+      color: #8b3a3a;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .acerca-body .saludo {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.95rem;
+      color: #8b3a3a;
+      display: block;
+      margin-top: 1.1rem;
+      margin-bottom: 0.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .acerca-body .firma {
+      font-size: 0.8rem;
+      font-style: italic;
+      color: #5a3e1b;
+      margin-top: 0;
+    }
+
+    .acerca-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .acerca-divider span { font-size: 0.9rem; color: #8b3a3a; }
+    .acerca-divider::before, .acerca-divider::after {
+      content: ''; flex: 1; height: 1px; background: #c8b99a;
+    }
+
+    /* TOOLBAR */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #1a1208;
+      background: #ede8dc;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-label {
+      font-family: 'Special Elite', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #5a3e1b;
+      margin-right: 0.25rem;
+    }
+
+    .filter-btn {
+      font-family: 'Special Elite', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border: 1px solid #1a1208;
+      background: transparent;
+      color: #1a1208;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: #1a1208;
+      color: #f5f0e8;
+    }
+
+    .search-box {
+      margin-left: auto;
+      font-family: 'Special Elite', monospace;
+      font-size: 11px;
+      padding: 3px 8px;
+      border: 1px solid #1a1208;
+      background: #f5f0e8;
+      color: #1a1208;
+      width: 180px;
+      outline: none;
+    }
+
+    .search-box::placeholder { color: #9a8870; font-style: italic; }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .card {
+      border-right: 1px solid #c8b99a;
+      border-bottom: 1px solid #c8b99a;
+      padding: 1.2rem 1rem 1rem;
+      background: #f5f0e8;
+      transition: background 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card:hover { background: #ede5d4; }
+
+    .card-pub {
+      font-family: 'Special Elite', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #8b3a3a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-pub::before {
+      content: '';
+      display: inline-block;
+      width: 14px; height: 1px;
+      background: #8b3a3a;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 1.3;
+      color: #1a1208;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: auto;
+      padding-top: 0.5rem;
+      border-top: 1px solid #c8b99a;
+    }
+
+    .card-date {
+      font-family: 'Special Elite', monospace;
+      font-size: 10px;
+      color: #5a3e1b;
+    }
+
+    .card-action {
+      font-family: 'Special Elite', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8b3a3a;
+      border-bottom: 1px solid #8b3a3a;
+      padding-bottom: 1px;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+      font-family: 'Special Elite', monospace;
+      color: #5a3e1b;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+    }
+
+    /* FOOTER */
+    .footer-strip {
+      border-top: 3px double #1a1208;
+      padding: 0.6rem 1rem;
+      text-align: center;
+      font-family: 'Special Elite', monospace;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #5a3e1b;
+      background: #ede8dc;
+    }
+
+    .card[hidden] { display: none; }
+
+    /* QR SECTION */
+    .qr-section {
+      border-top: 1px solid #c8b99a;
+      background: #ede8dc;
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .qr-label {
+      font-family: 'Special Elite', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #5a3e1b;
+    }
+
+    #qrcode canvas, #qrcode img {
+      border: 6px solid #f5f0e8;
+      outline: 1px solid #c8b99a;
+      display: block;
+    }
+
+    .qr-url {
+      font-family: 'Special Elite', monospace;
+      font-size: 9px;
+      color: #9a8870;
+      letter-spacing: 0.05em;
+      word-break: break-all;
+      text-align: center;
+      max-width: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="masthead">
+    <p class="masthead-eyebrow">Archivo Histórico de Prensa Libertaria</p>
+    <h1 class="masthead-title">Hemeroteca Ácrata</h1>
+    <p class="masthead-subtitle">Documentos del movimiento obrero y anarquista</p>
+    <div class="masthead-rule"><span>✦</span></div>
+  </div>
+
+  <div class="acerca-wrapper">
+    <button class="acerca-toggle" id="acercaToggle" aria-expanded="false">
+      <span>Acerca de esta digitalización</span>
+      <span class="arrow">▾</span>
+    </button>
+    <div class="acerca-body" id="acercaBody">
+      <p>Esta digitalización fue realizada con medios propios y no profesionales, y con nula experiencia en fotografía y procesos de digitalización, lo que justifica las deficiencias de luz y color. A ello se suman algunos recortes en las páginas por contar con solo dos manos que detenían la cámara o acomodaban el documento, pues los periódicos están empastados, lo cual dificultó su manipulación.</p>
+      <p>Los periódicos pueden consultarse en físico en la Hemeroteca, en la sección Comercial Histórica del <strong>Archivo Histórico del Estado de Aguascalientes</strong>. Pueden verse en facsímil en el archivo digital <em>Librado Rivera y los Hermanos Rojos</em>: <a href="https://www.libradorivera.com/inicio.html" target="_blank" rel="noopener">www.libradorivera.com</a>. Solo un número de <em>El Anticristo</em> se encontró en físico en el Archivo Histórico del Instituto Cultural de Aguascalientes.</p>
+      <p>También se encuentran en formato físico y digital (solo algunos) en el Archivo del <strong>Instituto Internacional de la Historia Social en Amsterdam</strong> — esto se debe a la relación de Alfonso Guerrero con Diego Abad de Santillán y Max Nettlau, quienes donaron sus archivos personales, entre ellos los periódicos del Grupo Cultura Racional.</p>
+      <p>Aunque ya existen otras digitalizaciones, optamos por ofrecer una lectura que conserve los colores rojo y negro de la tinta con que se imprimieron —que además tiene un simbolismo asociado a la lucha anarcosindicalista— que en las otras opciones no puede apreciarse.</p>
+      <p>Con solo leer los títulos podrás conocer las consignas del <strong>Grupo Cultura Racional de la Unión de Carpinteros y Similares</strong> de la sección de Aguascalientes. A través del lente anarquista nos dirigen la mirada hacia el <em>Horizonte Libertario</em>, en el que encontraremos la solidaridad y libertad plena, sin ataduras ni coerción, donde no hay <em>Ni Dios Ni Amo</em>. Donde no existe la manipulación a través del temor y la resignación, y en el que las armas son la organización, la educación y la ciencia que servirán para derrocar la institución eclesiástica, postura que se refleja en <em>El Anticristo</em>.</p>
+      <p>Se les desea una lectura de disfrute y luz que les ilumine el sendero a la libertad y la emancipación animal y humana, que solo con el bello ideal de la anarquía será posible.</p>
+      <p>Se recomienda su reproducción total o parcial por todos los medios posibles para su difusión libre, como hubieran querido los editores, sin necesidad de ninguna autorización.</p>
+      <div class="acerca-divider"><span>✦</span></div>
+      <span class="saludo">¡Salud y anarquía!</span>
+      <p class="firma">A. A. &nbsp;—&nbsp; Aguascalientes, Ags., abril de 2026.</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="toolbar-label">Filtrar:</span>
+    <button class="filter-btn active" data-filter="all">Todos</button>
+    <button class="filter-btn" data-filter="Horizonte Libertario">Horizonte Libertario</button>
+    <button class="filter-btn" data-filter="Ni Dios Ni Amo">Ni Dios Ni Amo</button>
+    <button class="filter-btn" data-filter="El Anticristo">El Anticristo</button>
+    <input class="search-box" type="text" placeholder="Buscar número, año..." id="searchInput" />
+  </div>
+
+  <div class="grid" id="grid">
+
+    <a class="card" href="pdfs/horizonte-libertario-01.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 1</div>
+      <div class="card-meta"><span class="card-date">1922</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/horizonte-libertario-02.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 2</div>
+      <div class="card-meta"><span class="card-date">1922</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/horizonte-libertario-03.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 11</div>
+      <div class="card-meta"><span class="card-date">1923</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/horizonte-libertario-04.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 4</div>
+      <div class="card-meta"><span class="card-date">—</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/horizonte-libertario-05.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 5</div>
+      <div class="card-meta"><span class="card-date">—</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/horizonte-libertario-06.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 6</div>
+      <div class="card-meta"><span class="card-date">—</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/horizonte-libertario-07.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 7</div>
+      <div class="card-meta"><span class="card-date">—</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/horizonte-libertario-08.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 8</div>
+      <div class="card-meta"><span class="card-date">—</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/horizonte-libertario-09.pdf" target="_blank" data-pub="Horizonte Libertario">
+      <div class="card-pub">Horizonte Libertario</div>
+      <div class="card-title">Núm. 9</div>
+      <div class="card-meta"><span class="card-date">—</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/ni-dios-ni-amo.pdf" target="_blank" data-pub="Ni Dios Ni Amo">
+      <div class="card-pub">Ni Dios Ni Amo</div>
+      <div class="card-title">Núm. 1</div>
+      <div class="card-meta"><span class="card-date">—</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+    <a class="card" href="pdfs/el-anticristo.pdf" target="_blank" data-pub="El Anticristo">
+      <div class="card-pub">El Anticristo</div>
+      <div class="card-title">Núm. 1</div>
+      <div class="card-meta"><span class="card-date">—</span><span class="card-action">Abrir PDF ↗</span></div>
+    </a>
+
+  </div>
+
+  <div class="footer-strip">
+    11 documentos &nbsp;·&nbsp; Acceso libre &nbsp;·&nbsp; Archivo histórico de prensa ácrata &nbsp;·&nbsp; Aguascalientes, 2026
+  </div>
+
+  <div class="qr-section">
+    <p class="qr-label">Comparte esta página</p>
+    <div id="qrcode"></div>
+    <p class="qr-url" id="qrUrl"></p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const url = window.location.href.split('?')[0].split('#')[0];
+    document.getElementById('qrUrl').textContent = url;
+    new QRCode(document.getElementById('qrcode'), {
+      text: url,
+      width: 128,
+      height: 128,
+      colorDark: '#1a1208',
+      colorLight: '#f5f0e8',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  </script>
+
+  <script>
+    const toggle = document.getElementById('acercaToggle');
+    const body = document.getElementById('acercaBody');
+
+    toggle.addEventListener('click', () => {
+      const isOpen = body.classList.toggle('open');
+      toggle.classList.toggle('open', isOpen);
+      toggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.card');
+    const searchInput = document.getElementById('searchInput');
+
+    function applyFilters() {
+      const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+      const query = searchInput.value.toLowerCase().trim();
+      cards.forEach(card => {
+        const matchesPub = activeFilter === 'all' || card.dataset.pub === activeFilter;
+        const matchesSearch = !query || card.textContent.toLowerCase().includes(query);
+        card.hidden = !(matchesPub && matchesSearch);
+      });
+      const visible = [...cards].filter(c => !c.hidden);
+      let noRes = document.querySelector('.no-results');
+      if (visible.length === 0) {
+        if (!noRes) {
+          noRes = document.createElement('div');
+          noRes.className = 'no-results';
+          noRes.textContent = 'Ningún documento coincide con la búsqueda.';
+          document.getElementById('grid').appendChild(noRes);
+        }
+      } else if (noRes) { noRes.remove(); }
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', applyFilters);
+  </script>
+
+</body>
+</html>
